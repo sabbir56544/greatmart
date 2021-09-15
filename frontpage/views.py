@@ -2,7 +2,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import Product, Category, Cart, CartItem
 
-
+#paginator
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 def home(request):
     categories = Category.objects.all()
@@ -24,13 +25,23 @@ def store(request, category_slug=None):
     if category_slug != None:
         categories = get_object_or_404(Category, slug=category_slug)
         products = Product.objects.filter(category=categories, is_stock=True)
+
+        #paginator
+        paginator = Paginator(products, 3)
+        page = request.GET.get('page')
+        pagged_products = paginator.get_page(page)
         products_count = products.count()
     else:
         products = Product.objects.filter(is_stock=True)
+
+        #paginator
+        paginator = Paginator(products, 3)
+        page = request.GET.get('page')
+        pagged_products = paginator.get_page(page)
         products_count = products.count()
 
     context = {
-        'products': products,
+        'products': pagged_products,
         'products_count': products_count,
         'categories': category,
     }
