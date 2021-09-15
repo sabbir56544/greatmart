@@ -1,7 +1,9 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import Product, Category, Cart, CartItem
+from django.http.response import JsonResponse
 
+from django.db.models import Q
 #paginator
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
@@ -131,3 +133,23 @@ def remove_cart_item(request, product_id):
     cart_item = CartItem.objects.get(product=product, cart=cart)
     cart_item.delete()
     return redirect('cart_view')
+
+# search product
+
+
+def search_product(request):
+    if request.method == 'POST':
+        search_keyword = request.POST['search_keyword']
+        products = Product.objects.filter(Q(product_name__contains=search_keyword) | Q(category__category_name__contains=search_keyword))
+        product_count = products.count()
+        category = Category.objects.all()
+        return render(request, 'search.html', {'products': products, 'search_key': search_keyword, 'categories': category, 'product_count': product_count})
+   
+
+
+def autosuggest(request):
+    query_original = request.GET.get('term')
+    queryset = Product.objects.filter(Q(product_name__icontains=query_original) | Q(category__category_name__icontains=query_original))
+    mylist = []
+    mylist += [x.product_name for x in queryset ]
+    return JsonResponse(mylist, safe=False)

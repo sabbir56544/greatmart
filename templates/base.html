@@ -29,6 +29,9 @@
 <!-- custom javascript -->
 <script src="{% static 'js/script.js' %}" type="text/javascript"></script>
 
+<!-- autosuggest -->
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
 
 <script type="text/javascript">
 /// some script
@@ -91,9 +94,10 @@ $(document).ready(function() {
             </div> <!-- col.// -->
             <a href="{% url 'store' %}" class="btn btn-outline-primary">Store</a>
             <div class="col-lg  col-md-6 col-sm-12 col">
-                <form action="#" class="search">
+                <form action="/search" class="search" method="POST">
+                    {% csrf_token %}
                     <div class="input-group w-100">
-                        <input type="text" class="form-control" style="width:60%;" placeholder="Search">
+                        <input type="text" class="form-control" id="tags" name="search_keyword" style="width:60%;" placeholder="Search">
                         
                         <div class="input-group-append">
                           <button class="btn btn-primary" type="submit">
@@ -161,7 +165,18 @@ $(document).ready(function() {
 
 
 
-    
+    <!-- autocomplete search -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>  
+        $( "#tags" ).autocomplete({
+        source: "{% url 'autosuggest' %}"
+      }); 
+    </script>  
+
+
+  
 
 </body>
 </html>    
