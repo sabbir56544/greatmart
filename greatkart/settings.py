@@ -74,7 +74,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'greatkart.wsgi.application'
 
-AUTH_USER_MODEL = 'accounts.Account'
+# AUTH_USER_MODEL = 'accounts.Account'
 
 
 # Database
@@ -138,3 +138,12 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# SMTP Config
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'sabbirahmed56544@gmail.com'
+EMAIL_HOST_PASSWORD = 'sabbirevu56544'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'sabbirahmed56544@gmail.com'
